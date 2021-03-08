@@ -1,6 +1,5 @@
 from selenium import webdriver
 from twocaptcha import TwoCaptcha
-from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -11,12 +10,15 @@ class Automator:
         self.browser.get(self.URL)
 
         self.next = '//*[@id="department_13"]'
+        self.abuseReports = '//*[@id="department_219"]'
+        self.phishing = '//*[@id="department_237"]'
         self.radialButton = '//*[@id="maincorecontent"]/form[2]/div/div[2]/div/input'
 
         self.xpathFirstLastName = '//*[@id="maincorecontent"]/form[2]/div/div[2]/div[1]/table/tbody/tr[1]/td[2]/input'
         self.xpathEmail = '//*[@id="maincorecontent"]/form[2]/div/div[2]/div[1]/table/tbody/tr[2]/td[2]/input'
-        self.xpathAccountUsername = '//*[@id="maincorecontent"]/form[2]/div/div[2]/table[5]/tbody/tr[1]/td[2]/input'
-        self.xpathSupportPin = '//*[@id="maincorecontent"]/form[2]/div/div[2]/table[5]/tbody/tr[2]/td[2]/input'
+        self.xpathAbusiveDomain = '//*[@id="maincorecontent"]/form[2]/div/div[2]/table[3]/tbody/tr[1]/td[2]/input'
+        self.xpathAbusiveURL = '//*[@id="maincorecontent"]/form[2]/div/div[2]/table[3]/tbody/tr[2]/td[2]/textarea'
+        self.xpathTargetedWebsite = '//*[@id="maincorecontent"]/form[2]/div/div[2]/table[5]/tbody/tr/td[2]/input'
         self.xpathSubject = '//*[@id="ticketsubject"]'
         self.xpathBody = '//*[@id="ticketmessage"]'
         self.xpathTermsCheck = '// *[ @ id = "maincorecontent"] / form[2] / div / div[2] / label / input'
@@ -25,29 +27,35 @@ class Automator:
 
         self.firstLastName = inputParams['first-last-name']
         self.email = inputParams['email']
-        self.accountUsername = inputParams['account-username']
-        self.supportPin = inputParams['support-pin']
+        self.abusiveDomain = inputParams['abusive-domain']
+        self.abusiveURL = inputParams['abusive-url']
+        self.targetedWebsite = inputParams['targeted-website']
         self.subject = inputParams['subject']
         self.body = inputParams['body']
 
     def formSubmit(self):
         # Page ==> 1
         self.browser.find_element_by_xpath(self.next).click()
+        self.browser.find_element_by_xpath(self.abuseReports).click()
+        self.browser.find_element_by_xpath(self.phishing).click()
         self.browser.find_element_by_xpath(self.radialButton).click()
 
         # Page ==> 2
         self.browser.find_element_by_xpath(self.xpathFirstLastName).send_keys(self.firstLastName)
         self.browser.find_element_by_xpath(self.xpathEmail).send_keys(self.email)
-        self.browser.find_element_by_xpath(self.xpathAccountUsername).send_keys(self.accountUsername)
-        self.browser.find_element_by_xpath(self.xpathSupportPin).send_keys(self.supportPin)
+        self.browser.find_element_by_xpath(self.xpathAbusiveDomain).send_keys(self.abusiveDomain)
+        self.browser.find_element_by_xpath(self.xpathAbusiveURL).send_keys(self.abusiveURL)
+        self.browser.find_element_by_xpath(self.xpathTargetedWebsite).send_keys(self.targetedWebsite)
         self.browser.find_element_by_xpath(self.xpathSubject).send_keys(self.subject)
         self.browser.find_element_by_xpath(self.xpathBody).send_keys(self.body)
         self.browser.find_element_by_xpath(self.xpathTermsCheck).click()
+
         self.captchaHandler()
 
         self.browser.find_element_by_xpath(self.xpathSubmit).click()
 
-        # self.browser.quit()
+        self.browser.find_element_by_xpath('//*[@id="maincorecontent"]/div/div[2]/table[2]/tbody/tr[1]/td[2]')
+        print('Form Submitted !!')
 
     def captchaHandler(self):
         element = self.browser.find_element_by_class_name("g-recaptcha-response")
@@ -70,8 +78,9 @@ class Automator:
 formData = {
     'first-last-name': 'Name',
     'email': 'abc@example.com',
-    'account-username': 'username',
-    'support-pin': '12345',
+    'abusive-domain': 'domain',
+    'abusive-url': 'domain@abc.com',
+    'targeted-website' : 'website1@example.com',
     'subject': 'This is an important subject !!',
     'body': 'This is Body !!'
 
