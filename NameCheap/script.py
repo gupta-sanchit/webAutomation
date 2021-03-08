@@ -54,7 +54,6 @@ class Automator:
 
         self.browser.find_element_by_xpath(self.xpathSubmit).click()
 
-        self.browser.find_element_by_xpath('//*[@id="maincorecontent"]/div/div[2]/table[2]/tbody/tr[1]/td[2]')
         print('Form Submitted !!')
 
     def captchaHandler(self):
@@ -80,7 +79,7 @@ formData = {
     'email': 'abc@example.com',
     'abusive-domain': 'domain',
     'abusive-url': 'domain@abc.com',
-    'targeted-website' : 'website1@example.com',
+    'targeted-website': 'website1@example.com',
     'subject': 'This is an important subject !!',
     'body': 'This is Body !!'
 
